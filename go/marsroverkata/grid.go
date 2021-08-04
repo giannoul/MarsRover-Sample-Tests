@@ -17,6 +17,15 @@ func NewGrid(h int, w int) *Grid {
 	return &g
 }
 
+func (g Grid) AddObstacles(obstacles []Obstacle) {
+	for i := range obstacles {
+		p := obstacles[i].position
+		// The -1 is because on slices we start counting from 0
+		g.Tiles[p.x-1][p.y-1] = "*"
+	}
+
+}
+
 func (g Grid) DrawHorizontalLine() {
 	fmt.Println("  " + strings.Repeat("----", g.Width) + "---")
 }
@@ -67,7 +76,6 @@ func (g *Grid) Draw() {
 		} else {
 			fmt.Println("|")
 		}
-
 	}
 	g.DrawHorizontalLine()
 	// draw South
