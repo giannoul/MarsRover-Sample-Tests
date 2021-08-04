@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+var Markers = [4]string{"^", ">", "v", "<"}
+
 type Grid struct {
 	Height int
 	Width  int
@@ -24,6 +26,10 @@ func (g Grid) AddObstacles(obstacles []Obstacle) {
 		g.Tiles[p.x-1][p.y-1] = "*"
 	}
 
+}
+
+func (g Grid) UpdateRoverPosition(h Direction, p Coordinates) {
+	g.Tiles[p.x-1][p.y-1] = Markers[h]
 }
 
 func (g Grid) DrawHorizontalLine() {
