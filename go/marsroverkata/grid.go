@@ -18,11 +18,11 @@ func NewGrid(h int, w int) *Grid {
 }
 
 func (g Grid) DrawHorizontalLine() {
-	fmt.Println(strings.Repeat("----", g.Width) + "---")
+	fmt.Println("  " + strings.Repeat("----", g.Width) + "---")
 }
 
 func (g Grid) DrawHorizontalNumbers() {
-	fmt.Printf("  ")
+	fmt.Printf("    ")
 	for i := 0; i < g.Width; i++ {
 		fmt.Printf(" %2d ", i+1)
 	}
@@ -44,16 +44,32 @@ func (g *Grid) initializeTiles() {
 }
 
 func (g *Grid) Draw() {
+	// draw North
+	fmt.Println(strings.Repeat(" ", g.Width*2) + "  N")
 	g.DrawHorizontalNumbers()
 	for i := 0; i < g.Height; i++ {
 		g.DrawHorizontalLine()
 		for j := 0; j < g.Width; j++ {
-			if j == 0 {
-				fmt.Printf("%2d", i+1)
+			// draw West
+			if i == (g.Height/2)-1 && j == 0 {
+				fmt.Printf("W %2d", i+1)
+			} else {
+				if j == 0 {
+					fmt.Printf("  %2d", i+1)
+				}
 			}
+
 			fmt.Printf("| %s ", g.Tiles[i][j])
 		}
-		fmt.Println("|")
+		// draw West
+		if i == (g.Height/2)-1 {
+			fmt.Println("|  E")
+		} else {
+			fmt.Println("|")
+		}
+
 	}
 	g.DrawHorizontalLine()
+	// draw South
+	fmt.Println(strings.Repeat(" ", g.Width*2) + "  S")
 }
