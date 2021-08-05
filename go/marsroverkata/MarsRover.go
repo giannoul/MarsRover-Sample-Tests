@@ -78,15 +78,39 @@ func (r MarsRover) acceptCommands(commands []Command) {
 }
 
 func (r MarsRover) coordinates() Coordinates {
-	return Coordinates{0, 0}
+	return r.position
 }
 
-func (r MarsRover) forward() {
-
+func (r *MarsRover) forward() {
+	curr := r.position
+	switch r.heading {
+	case N:
+		r.position = Coordinates{curr.x, curr.y - 1}
+	case E:
+		r.position = Coordinates{curr.x + 1, curr.y}
+	case S:
+		r.position = Coordinates{curr.x, curr.y + 1}
+	case W:
+		r.position = Coordinates{curr.x - 1, curr.y}
+	default:
+		panic("I won't know which way I am heading!!")
+	}
 }
 
-func (r MarsRover) backward() {
-
+func (r *MarsRover) backward() {
+	curr := r.position
+	switch r.heading {
+	case N:
+		r.position = Coordinates{curr.x, curr.y + 1}
+	case E:
+		r.position = Coordinates{curr.x - 1, curr.y}
+	case S:
+		r.position = Coordinates{curr.x, curr.y - 1}
+	case W:
+		r.position = Coordinates{curr.x + 1, curr.y}
+	default:
+		panic("I won't know which way I am heading!!")
+	}
 }
 
 func (r *MarsRover) turnRight() {
