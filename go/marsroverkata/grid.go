@@ -7,7 +7,8 @@ import (
 
 var Markers = [4]string{"^", ">", "v", "<"}
 
-var MaxTerrainPos int
+var MaxTerrainPos = 10
+var CurrentGrid *Grid
 
 type Grid struct {
 	Height int
@@ -26,13 +27,22 @@ func (g Grid) AddObstacles(obstacles []Obstacle) {
 	for i := range obstacles {
 		p := obstacles[i].position
 		// The -1 is because on slices we start counting from 0
-		g.Tiles[p.x-1][p.y-1] = "*"
+		g.Tiles[p.y-1][p.x-1] = "*"
 	}
 
 }
 
 func (g Grid) UpdateRoverPosition(h Direction, p Coordinates) {
-	g.Tiles[p.x-1][p.y-1] = Markers[h]
+	// Clear the previous rover position
+	for i := 0; i < g.Height; i++ {
+		for j := 0; j < g.Width; j++ {
+			if g.Tiles[i][j] == "^" || g.Tiles[i][j] == ">" || g.Tiles[i][j] == "v" || g.Tiles[i][j] == "<" {
+				g.Tiles[i][j] = " "
+			}
+		}
+	}
+
+	g.Tiles[p.y-1][p.x-1] = Markers[h]
 }
 
 func (g Grid) DrawHorizontalLine() {
@@ -64,10 +74,10 @@ func (g *Grid) initializeTiles() {
 func (g *Grid) Draw() {
 	// draw North
 	fmt.Println(strings.Repeat(" ", g.Width*2) + "  N")
-	g.DrawHorizontalNumbers()
-	for i := 0; i < g.Height; i++ {
+
+	for i := g.Width - 1; i >= 0; i-- {
 		g.DrawHorizontalLine()
-		for j := 0; j < g.Width; j++ {
+		for j := 0; j < g.Height; j++ {
 			// draw West
 			if i == (g.Height/2)-1 && j == 0 {
 				fmt.Printf("W %2d", i+1)
@@ -79,7 +89,7 @@ func (g *Grid) Draw() {
 
 			fmt.Printf("| %s ", g.Tiles[i][j])
 		}
-		// draw West
+		// draw East
 		if i == (g.Height/2)-1 {
 			fmt.Println("|  E")
 		} else {
@@ -87,6 +97,7 @@ func (g *Grid) Draw() {
 		}
 	}
 	g.DrawHorizontalLine()
+	g.DrawHorizontalNumbers()
 	// draw South
 	fmt.Println(strings.Repeat(" ", g.Width*2) + "  S")
 }

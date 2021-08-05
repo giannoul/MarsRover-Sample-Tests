@@ -75,7 +75,24 @@ func (r MarsRover) currentLocation() interface{} {
 	return fmt.Sprintf("%d %d %s", r.position.x, r.position.y, r.heading)
 }
 
-func (r MarsRover) acceptCommands(commands []Command) {
+func (r *MarsRover) acceptCommands(commands []Command) {
+	r.showOnGrid() // Show the initial position
+	for i := range commands {
+		switch commands[i] {
+		case B:
+			r.backward()
+		case F:
+			r.forward()
+		case L:
+			r.turnLeft()
+		case R:
+			r.turnRight()
+		default:
+			panic("I don't know that command!!")
+		}
+		fmt.Println(r.position)
+		r.showOnGrid()
+	}
 
 }
 
@@ -102,11 +119,11 @@ func (r *MarsRover) forward() {
 	curr := r.position
 	switch r.heading {
 	case N:
-		r.position = Coordinates{curr.x, curr.y - 1}
+		r.position = Coordinates{curr.x, curr.y + 1}
 	case E:
 		r.position = Coordinates{curr.x + 1, curr.y}
 	case S:
-		r.position = Coordinates{curr.x, curr.y + 1}
+		r.position = Coordinates{curr.x, curr.y - 1}
 	case W:
 		r.position = Coordinates{curr.x - 1, curr.y}
 	default:
@@ -119,11 +136,11 @@ func (r *MarsRover) backward() {
 	curr := r.position
 	switch r.heading {
 	case N:
-		r.position = Coordinates{curr.x, curr.y + 1}
+		r.position = Coordinates{curr.x, curr.y - 1}
 	case E:
 		r.position = Coordinates{curr.x - 1, curr.y}
 	case S:
-		r.position = Coordinates{curr.x, curr.y - 1}
+		r.position = Coordinates{curr.x, curr.y + 1}
 	case W:
 		r.position = Coordinates{curr.x + 1, curr.y}
 	default:
@@ -140,4 +157,9 @@ func (r *MarsRover) turnRight() {
 		newDirection = r.heading + 1
 	}
 	r.heading = newDirection
+}
+
+func (r *MarsRover) showOnGrid() {
+	CurrentGrid.UpdateRoverPosition(r.heading, r.position)
+	CurrentGrid.Draw()
 }
