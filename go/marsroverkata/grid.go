@@ -7,6 +7,8 @@ import (
 
 var Markers = [4]string{"^", ">", "v", "<"}
 
+var MaxTerrainPos int
+
 type Grid struct {
 	Height int
 	Width  int
@@ -14,6 +16,7 @@ type Grid struct {
 }
 
 func NewGrid(h int, w int) *Grid {
+	MaxTerrainPos = h
 	g := Grid{Height: h, Width: w}
 	g.initializeTiles()
 	return &g

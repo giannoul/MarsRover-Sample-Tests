@@ -93,3 +93,27 @@ func TestSingleCommandBackwardOneTileFacingWest(t *testing.T) {
 	expectedPosition := Coordinates{6, 5}
 	assert.Equal(t, expectedPosition, marsRover.coordinates())
 }
+
+func TestSingleCommandForwardOneTileFacingWestFold(t *testing.T) {
+	plateau := Plateau{maxX: 10, maxY: 10}
+	MaxTerrainPos = 10
+	startingPosition := Coordinates{1, 9}
+	marsRover := MarsRover{plateau: plateau, heading: W, position: startingPosition}
+
+	marsRover.forward()
+
+	expectedPosition := Coordinates{10, 9}
+	assert.Equal(t, expectedPosition, marsRover.coordinates())
+}
+
+func TestSingleCommandBackwardOneTileFacingWestFold(t *testing.T) {
+	plateau := Plateau{maxX: 10, maxY: 10}
+	MaxTerrainPos = 10
+	startingPosition := Coordinates{10, 10}
+	marsRover := MarsRover{plateau: plateau, heading: W, position: startingPosition}
+
+	marsRover.backward()
+
+	expectedPosition := Coordinates{1, 10}
+	assert.Equal(t, expectedPosition, marsRover.coordinates())
+}

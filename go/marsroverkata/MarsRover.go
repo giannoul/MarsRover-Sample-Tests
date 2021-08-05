@@ -83,6 +83,21 @@ func (r MarsRover) coordinates() Coordinates {
 	return r.position
 }
 
+func (r *MarsRover) fold() {
+	if r.position.x > MaxTerrainPos {
+		r.position.x = 1
+	}
+	if r.position.x < 1 {
+		r.position.x = MaxTerrainPos
+	}
+	if r.position.y > MaxTerrainPos {
+		r.position.y = 1
+	}
+	if r.position.y < 1 {
+		r.position.y = MaxTerrainPos
+	}
+}
+
 func (r *MarsRover) forward() {
 	curr := r.position
 	switch r.heading {
@@ -97,6 +112,7 @@ func (r *MarsRover) forward() {
 	default:
 		panic("I won't know which way I am heading!!")
 	}
+	r.fold()
 }
 
 func (r *MarsRover) backward() {
@@ -113,6 +129,7 @@ func (r *MarsRover) backward() {
 	default:
 		panic("I won't know which way I am heading!!")
 	}
+	r.fold()
 }
 
 func (r *MarsRover) turnRight() {
