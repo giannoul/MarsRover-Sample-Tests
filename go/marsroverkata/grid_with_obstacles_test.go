@@ -8,8 +8,8 @@ import (
 
 func TestGridWithObstaclesVisualization(t *testing.T) {
 	obstacles := []Obstacle{
-		Obstacle{position: Coordinates{2, 3}},
-		Obstacle{position: Coordinates{8, 8}},
+		{position: Coordinates{2, 3}},
+		{position: Coordinates{8, 8}},
 	}
 	plateau := Plateau{maxX: 5, maxY: 5, obstacles: obstacles}
 	grid := NewGrid(10, 10)

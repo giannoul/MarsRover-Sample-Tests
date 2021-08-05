@@ -78,6 +78,10 @@ func (r MarsRover) currentLocation() interface{} {
 func (r *MarsRover) acceptCommands(commands []Command) {
 	r.showOnGrid() // Show the initial position
 	for i := range commands {
+		if r.status == NOK { //The rover will stay still is an obstacle is found
+			fmt.Println(" 💥 🚨 Obstacle ahead, aborting!!!! 🚀 ")
+			break
+		}
 		switch commands[i] {
 		case B:
 			r.backward()
@@ -90,10 +94,17 @@ func (r *MarsRover) acceptCommands(commands []Command) {
 		default:
 			panic("I don't know that command!!")
 		}
-		fmt.Println(r.position)
 		r.showOnGrid()
 	}
 
+}
+
+func (r *MarsRover) checkForObstacleCrash(c Coordinates) {
+	for i := range r.plateau.obstacles {
+		if c == r.plateau.obstacles[i].position {
+			r.status = NOK
+		}
+	}
 }
 
 func (r MarsRover) coordinates() Coordinates {
@@ -116,35 +127,45 @@ func (r *MarsRover) fold() {
 }
 
 func (r *MarsRover) forward() {
-	curr := r.position
+	curr, newPosition := r.position, r.position
+
 	switch r.heading {
 	case N:
-		r.position = Coordinates{curr.x, curr.y + 1}
+		newPosition = Coordinates{curr.x, curr.y + 1}
 	case E:
-		r.position = Coordinates{curr.x + 1, curr.y}
+		newPosition = Coordinates{curr.x + 1, curr.y}
 	case S:
-		r.position = Coordinates{curr.x, curr.y - 1}
+		newPosition = Coordinates{curr.x, curr.y - 1}
 	case W:
-		r.position = Coordinates{curr.x - 1, curr.y}
+		newPosition = Coordinates{curr.x - 1, curr.y}
 	default:
 		panic("I won't know which way I am heading!!")
+	}
+	r.checkForObstacleCrash(newPosition)
+	if r.status == OK {
+		r.position = newPosition
 	}
 	r.fold()
 }
 
 func (r *MarsRover) backward() {
-	curr := r.position
+	curr, newPosition := r.position, r.position
 	switch r.heading {
 	case N:
-		r.position = Coordinates{curr.x, curr.y - 1}
+		newPosition = Coordinates{curr.x, curr.y - 1}
 	case E:
-		r.position = Coordinates{curr.x - 1, curr.y}
+		newPosition = Coordinates{curr.x - 1, curr.y}
 	case S:
-		r.position = Coordinates{curr.x, curr.y + 1}
+		newPosition = Coordinates{curr.x, curr.y + 1}
 	case W:
-		r.position = Coordinates{curr.x + 1, curr.y}
+		newPosition = Coordinates{curr.x + 1, curr.y}
 	default:
 		panic("I won't know which way I am heading!!")
+	}
+
+	r.checkForObstacleCrash(newPosition)
+	if r.status == OK {
+		r.position = newPosition
 	}
 	r.fold()
 }
@@ -162,4 +183,5 @@ func (r *MarsRover) turnRight() {
 func (r *MarsRover) showOnGrid() {
 	CurrentGrid.UpdateRoverPosition(r.heading, r.position)
 	CurrentGrid.Draw()
+	fmt.Println()
 }

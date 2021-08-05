@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-var Markers = [4]string{"^", ">", "v", "<"}
+var Markers = [4]string{"👆", "👉", "👇", "👈"}
 
 var MaxTerrainPos = 10
 var CurrentGrid *Grid
@@ -27,7 +27,7 @@ func (g Grid) AddObstacles(obstacles []Obstacle) {
 	for i := range obstacles {
 		p := obstacles[i].position
 		// The -1 is because on slices we start counting from 0
-		g.Tiles[p.y-1][p.x-1] = "*"
+		g.Tiles[p.y-1][p.x-1] = "🚧"
 	}
 
 }
@@ -36,8 +36,8 @@ func (g Grid) UpdateRoverPosition(h Direction, p Coordinates) {
 	// Clear the previous rover position
 	for i := 0; i < g.Height; i++ {
 		for j := 0; j < g.Width; j++ {
-			if g.Tiles[i][j] == "^" || g.Tiles[i][j] == ">" || g.Tiles[i][j] == "v" || g.Tiles[i][j] == "<" {
-				g.Tiles[i][j] = " "
+			if g.Tiles[i][j] == "👆" || g.Tiles[i][j] == "👉" || g.Tiles[i][j] == "👇" || g.Tiles[i][j] == "👈" {
+				g.Tiles[i][j] = "📍"
 			}
 		}
 	}
@@ -46,13 +46,13 @@ func (g Grid) UpdateRoverPosition(h Direction, p Coordinates) {
 }
 
 func (g Grid) DrawHorizontalLine() {
-	fmt.Println("  " + strings.Repeat("----", g.Width) + "---")
+	fmt.Println("  " + strings.Repeat("-----", g.Width) + "---")
 }
 
 func (g Grid) DrawHorizontalNumbers() {
 	fmt.Printf("    ")
 	for i := 0; i < g.Width; i++ {
-		fmt.Printf(" %2d ", i+1)
+		fmt.Printf("  %2d ", i+1)
 	}
 	fmt.Println()
 }
@@ -66,7 +66,7 @@ func (g *Grid) initializeTiles() {
 	// fill with spaces
 	for i := 0; i < g.Height; i++ {
 		for j := 0; j < g.Width; j++ {
-			g.Tiles[i][j] = " "
+			g.Tiles[i][j] = "  "
 		}
 	}
 }
