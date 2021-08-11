@@ -73,7 +73,7 @@ func (g *Grid) initializeTiles() {
 
 func (g *Grid) Draw() {
 	// draw North
-	fmt.Println(strings.Repeat(" ", g.Width*2) + "  N")
+	fmt.Println(strings.Repeat(" ", g.Width*2) + "       N")
 
 	for i := g.Width - 1; i >= 0; i-- {
 		g.DrawHorizontalLine()
@@ -99,5 +99,5 @@ func (g *Grid) Draw() {
 	g.DrawHorizontalLine()
 	g.DrawHorizontalNumbers()
 	// draw South
-	fmt.Println(strings.Repeat(" ", g.Width*2) + "  S")
+	fmt.Println(strings.Repeat(" ", g.Width*2) + "       S")
 }
